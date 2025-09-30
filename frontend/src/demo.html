@@ -1,0 +1,748 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bharat Pashudhan - Cattle Breed Identification</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            padding-right: 10px;
+        }
+
+        .container {
+            max-width: 410px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: white;
+            padding: 30px 20px 20px;
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: #4a9b8e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            text-align: left;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 2px;
+        }
+
+        .logo-text p {
+            font-size: 16px;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+
+        .main-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            line-height: 1.2;
+        }
+
+        .scan-button {
+            background: linear-gradient(135deg, #4a9b8e 0%, #357a75 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 18px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 0 auto 40px;
+            box-shadow: 0 4px 15px rgba(74, 155, 142, 0.3);
+        }
+
+        .scan-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 155, 142, 0.4);
+        }
+
+        .scan-button:active {
+            transform: translateY(0);
+        }
+
+        .camera-icon {
+            font-size: 24px;
+        }
+
+        .breeds-section {
+            padding: 0 20px 30px;
+        }
+
+        .breeds-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .breeds-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .breed-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .breed-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: #4a9b8e;
+        }
+
+        .breed-image {
+            width: 100%;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .gir {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23D2B48C" width="100" height="100"/><text x="50" y="55" font-family="Arial" font-size="12" text-anchor="middle" fill="%23654321">Gir</text></svg>');
+        }
+
+        .sahiwal {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23CD853F" width="100" height="100"/><text x="50" y="55" font-family="Arial" font-size="12" text-anchor="middle" fill="%23654321">Sahiwal</text></svg>');
+        }
+
+        .tharparkar {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23F5F5DC" width="100" height="100"/><text x="50" y="55" font-family="Arial" font-size="12" text-anchor="middle" fill="%23654321">Tharparkar</text></svg>');
+        }
+
+        .ongole {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23FFFAF0" width="100" height="100"/><text x="50" y="55" font-family="Arial" font-size="12" text-anchor="middle" fill="%23654321">Ongole</text></svg>');
+        }
+
+        .breed-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .upload-area {
+            display: none;
+            padding: 20px;
+            margin: 20px;
+            border: 2px dashed #4a9b8e;
+            border-radius: 15px;
+            text-align: center;
+            background: #f8f9fa;
+        }
+
+        .upload-area.active {
+            display: block;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .result-section {
+            display: none;
+            padding: 20px;
+            margin: 20px;
+            background: #e8f5e8;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .result-section.active {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .confidence {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+
+        .breed-info {
+            text-align: left;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .info-item {
+            margin-bottom: 8px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .reset-button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-button:hover {
+            background: #c0392b;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+                max-width: none;
+            }
+            
+            .main-title {
+                font-size: 28px;
+            }
+            
+            .breeds-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+        }
+    </style>
+    <script src="frontend/src/App.js">
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">🐄</div>
+                <div class="logo-text">
+                    <h1>BHARAT</h1>
+                    <p>PASHUDHAN APP</p>
+                </div>
+            </div>
+            
+            <h2 class="main-title">Cattle Breed Identification</h2>
+            
+            <button class="scan-button" id="scanButton">
+                <span class="camera-icon">📷</span>
+                AI SCAN
+            </button>
+        </div>
+
+        <div class="upload-area" id="uploadArea">
+            <p style="margin-bottom: 15px; color: #7f8c8d;">Click here or drag and drop an image of cattle</p>
+            <input type="file" id="fileInput" class="file-input" accept="image/*">
+            <button onclick="document.getElementById('fileInput').click()" style="background: #4a9b8e; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer;">Choose Image</button>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="result-title" id="resultBreed">Breed Identified</div>
+            <div class="confidence" id="confidence">Confidence: 95%</div>
+            <div class="breed-info" id="breedInfo">
+                
+            </div>
+            <button class="reset-button" id="resetButton">Scan Another</button>
+        </div>
+
+        <div class="breeds-section">
+            <h3 class="breeds-title">Breed Suggestions</h3>
+            <div class="breeds-grid">
+                <div class="breed-card" data-breed="gir">
+                    <div class="breed-image gir"><img src="breeds/gir.png" width="150" height="120></div>
+                    <div class="breed-name">Gir</div>
+                </div>
+                <div class="breed-card" data-breed="sahiwal">
+                    <div class="breed-image sahiwal"><img src="breeds/sahiwal.png" width="150" height="120></div>
+                    <div class="breed-name">Sahiwal</div>
+                </div>
+                <div class="breed-card" data-breed="tharparkar">
+                    <div class="breed-image tharparkar"><img src="breeds/Image_3.jpg" width="150" height="120></div>
+                    <div class="breed-name">Tharparkar</div>
+                </div>
+                <div class="breed-card" data-breed="ongole">
+                    <div class="breed-image ongole"><img src="breeds/Image_20.jpg" width="150" height="120></div>
+                    <div class="breed-name">Ongole</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Breed information database
+        const breedInfo = {
+            gir: {
+                name: "Gir",
+                origin: "Gujarat, India",
+                characteristics: "Heat tolerant, good milk producer",
+                avgMilk: "6-8 liters/day",
+                color: "Light to dark red with white patches"
+            },
+            sahiwal: {
+                name: "Sahiwal",
+                origin: "Punjab, Pakistan/India",
+                characteristics: "High milk yield, disease resistant",
+                avgMilk: "8-12 liters/day",
+                color: "Light to dark brown"
+            },
+            kankrej: {
+                name: "kankrej",
+                origin: "Gujarat, India",
+                characteristics: "Dual purpose, drought resistant",
+                avgMilk: "8 to 12  liters/day",
+                color: " silver-grey to iron-grey or steel black"
+            },
+            ongole: {
+                name: "Ongole",
+                origin: "Andhra Pradesh, India",
+                characteristics: "Large size, good for draft work",
+                avgMilk: "3-5 liters/day",
+                color: "White with gray markings"
+            }
+        };
+
+        // DOM elements
+        const scanButton = document.getElementById('scanButton');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const resultSection = document.getElementById('resultSection');
+        const resetButton = document.getElementById('resetButton');
+        const breedCards = document.querySelectorAll('.breed-card');
+
+        // Event listeners
+        scanButton.addEventListener('click', function() {
+            uploadArea.classList.add('active');
+            this.style.display = 'none';
+        });
+
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                simulateAIAnalysis();
+            }
+        });
+
+        resetButton.addEventListener('click', function() {
+            resetApp();
+        });
+
+        // Breed card clicks
+        breedCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const breed = this.dataset.breed;
+                showBreedInfo(breed);
+            });
+        });
+
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#357a75';
+            this.style.background = '#f0f8f8';
+        });
+
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#4a9b8e';
+            this.style.background = '#f8f9fa';
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#4a9b8e';
+            this.style.background = '#f8f9fa';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type.startsWith('image/')) {
+                simulateAIAnalysis();
+            }
+        });
+
+        // Simulate AI analysis
+        function simulateAIAnalysis() {
+            uploadArea.innerHTML = '<p style="color: #4a9b8e; font-weight: 600;">🔍 Analyzing image...</p>';
+            
+            setTimeout(() => {
+                const breeds = ['gir', 'sahiwal', 'tharparkar', 'ongole'];
+                const randomBreed = breeds[Math.floor(Math.random() * breeds.length)];
+                const confidence = Math.floor(Math.random() * 20) + 80; // 80-99%
+                
+                showBreedResult(randomBreed, confidence);
+            }, 2000);
+        }
+
+        // Show breed result
+        function showBreedResult(breed, confidence) {
+            const breedData = breedInfo[breed];
+            
+            document.getElementById('resultBreed').textContent = `Identified: ${breedData.name}`;
+            document.getElementById('confidence').textContent = `Confidence: ${confidence}%`;
+            
+            const infoHtml = `
+                <div class="info-item">
+                    <span class="info-label">Origin:</span> ${breedData.origin}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Characteristics:</span> ${breedData.characteristics}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Average Milk Yield:</span> ${breedData.avgMilk}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Color:</span> ${breedData.color}
+                </div>
+            `;
+            
+            document.getElementById('breedInfo').innerHTML = infoHtml;
+            
+            uploadArea.classList.remove('active');
+            resultSection.classList.add('active');
+        }
+
+        // Show breed info from card click
+        function showBreedInfo(breed) {
+            showBreedResult(breed, Math.floor(Math.random() * 10) + 90);
+        }
+
+        // Reset app
+        function resetApp() {
+            uploadArea.classList.remove('active');
+            resultSection.classList.remove('active');
+            scanButton.style.display = 'flex';
+            fileInput.value = '';
+            uploadArea.innerHTML = `
+                <p style="margin-bottom: 15px; color: #7f8c8d;">Click here or drag and drop an image of cattle</p>
+                <input type="file" id="fileInput" class="file-input" accept="image/*">
+                <button onclick="document.getElementById('fileInput').click()" style="background: #4a9b8e; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer;">Choose Image</button>
+            `;
+            
+            // Re-add event listener for new file input
+            document.getElementById('fileInput').addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    simulateAIAnalysis();
+                }
+            });
+        }
+
+        // Add some interactive animations
+        breedCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html> 
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bharat Pashudhan - Cattle Breed Identification</title>
+  <style>
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 410px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      overflow: hidden;
+      padding-bottom: 30px;
+    }
+    .header { text-align: center; padding: 30px 20px 20px; }
+    .logo { display:flex; align-items:center; justify-content:center; gap:15px; margin-bottom:30px; }
+    .logo-icon { width:60px;height:60px;background:#4a9b8e;border-radius:50%; display:flex;align-items:center;justify-content:center;color:white;font-size:24px;font-weight:bold; }
+    .logo-text h1 { font-size:24px; font-weight:700; color:#2c3e50; margin-bottom:2px; }
+    .logo-text p { font-size:16px; color:#7f8c8d; font-weight:500; }
+    .main-title { font-size:32px; font-weight:700; color:#2c3e50; margin-bottom:40px; line-height:1.2; }
+    .scan-button {
+      background: linear-gradient(135deg, #4a9b8e 0%, #357a75 100%);
+      color:white; border:none; border-radius:50px; padding:18px 40px;
+      font-size:18px;font-weight:600;cursor:pointer; display:flex;align-items:center;justify-content:center;gap:15px; margin:0 auto 40px;
+      box-shadow: 0 4px 15px rgba(74,155,142,0.3);
+      transition: all 0.3s ease;
+    }
+    .scan-button:hover { transform: translateY(-2px); box-shadow:0 6px 20px rgba(74,155,142,0.4); }
+    .scan-button:active { transform: translateY(0); }
+    .camera-icon { font-size:24px; }
+    .upload-area {
+      display:none;
+      padding:20px; margin:20px;
+      border:2px dashed #4a9b8e;
+      border-radius:15px;
+      text-align:center;
+      background:#f8f9fa;
+    }
+    .upload-area.active { display:block; }
+    .file-input { display:none; }
+    .result-section {
+      display:none;
+      padding:20px; margin:20px;
+      background:#e8f5e8;
+      border-radius:15px;
+      text-align:center;
+    }
+    .result-section.active { display:block; }
+    .result-title { font-size:20px; font-weight:600; color:#2c3e50; margin-bottom:10px; }
+    .confidence { font-size:14px; color:#7f8c8d; margin-bottom:15px; }
+    .breed-info { text-align:left; background:white; padding:15px; border-radius:10px; margin-top:15px; }
+    .info-item { margin-bottom:8px; }
+    .info-label { font-weight:600; color:#2c3e50; }
+    .reset-button {
+      background:#e74c3c;color:white;border:none;border-radius:25px;padding:10px 20px;
+      font-size:14px; cursor:pointer; margin-top:15px; transition: all 0.3s ease;
+    }
+    .reset-button:hover { background:#c0392b; }
+    .breeds-section { padding:0 20px; }
+    .breeds-title { font-size:24px; font-weight:600;color:#2c3e50;margin-bottom:20px;text-align:center; }
+    .breeds-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:15px; }
+    .breed-card {
+      background:#f8f9fa; border-radius:15px; padding:15px;text-align:center; cursor:pointer;
+      transition: all 0.3s ease; border:2px solid transparent;
+    }
+    .breed-card:hover { transform: translateY(-5px); box-shadow:0 8px 25px rgba(0,0,0,0.1); border-color:#4a9b8e; }
+    .breed-image { width:100%; height:100px; background-size:cover; background-position:center; border-radius:10px; margin-bottom:10px; }
+    .breed-name { font-size:16px; font-weight:600; color:#2c3e50; }
+
+    @media (max-width:480px) {
+      .container { margin:10px; max-width:none; }
+      .main-title { font-size:28px; }
+      .breeds-grid { grid-template-columns:repeat(2,1fr); gap:12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">🐄</div>
+        <div class="logo-text">
+          <h1>BHARAT</h1>
+          <p>PASHUDHAN APP</p>
+        </div>
+      </div>
+      <h2 class="main-title">Cattle Breed Identification</h2>
+      <button class="scan-button" id="scanButton">
+        <span class="camera-icon">📷</span> AI SCAN
+      </button>
+    </div>
+
+    <div class="upload-area" id="uploadArea">
+      <p style="margin-bottom: 15px; color: #7f8c8d;">Click or drag and drop an image</p>
+      <input type="file" id="fileInput" class="file-input" accept="image/*">
+      <button onclick="document.getElementById('fileInput').click()" style="background:#4a9b8e;color:white;border:none;padding:10px 20px;border-radius:25px;cursor:pointer;">Choose Image</button>
+    </div>
+
+    <div class="result-section" id="resultSection">
+      <div class="result-title" id="resultBreed">Breed Identified</div>
+      <div class="confidence" id="confidence">Confidence: 95%</div>
+      <div class="breed-info" id="breedInfo"></div>
+      <button class="reset-button" id="resetButton">Scan Another</button>
+    </div>
+
+    <div class="breeds-section">
+      <h3 class="breeds-title">Breed Suggestions</h3>
+      <div class="breeds-grid">
+        <div class="breed-card" data-breed="gir">
+          <div class="breed-image" style="background-image:url('breeds/gir.png')"></div>
+          <div class="breed-name">Gir</div>
+        </div>
+        <div class="breed-card" data-breed="sahiwal">
+          <div class="breed-image" style="background-image:url('breeds/sahiwal.png')"></div>
+          <div class="breed-name">Sahiwal</div>
+        </div>
+        <div class="breed-card" data-breed="murrah">
+          <div class="breed-image" style="background-image:url('breeds/murrah.png')"></div>
+          <div class="breed-name">Murrah</div>
+        </div>
+        <div class="breed-card" data-breed="ongole">
+          <div class="breed-image" style="background-image:url('breeds/Image_20.jpg')"></div>
+          <div class="breed-name">Ongole</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const scanButton = document.getElementById('scanButton');
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const resultSection = document.getElementById('resultSection');
+    const resetButton = document.getElementById('resetButton');
+    const breedCards = document.querySelectorAll('.breed-card');
+
+    // Show upload area
+    scanButton.addEventListener('click', () => {
+      uploadArea.classList.add('active');
+      scanButton.style.display = 'none';
+    });
+
+    // File input → upload to backend
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) uploadImage(e.target.files[0]);
+    });
+
+    // Reset app
+    resetButton.addEventListener('click', resetApp);
+
+    // Breed card → get info from backend
+    breedCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const breed = card.dataset.breed;
+        fetch(`/breed-info?breed=${breed}`)
+          .then(res => res.json())
+          .then(data => showBreedResult(breed, 100, data))
+          .catch(err => console.error(err));
+      });
+    });
+
+    // Drag & drop
+    uploadArea.addEventListener('dragover', e => {
+      e.preventDefault();
+      uploadArea.style.borderColor = '#357a75';
+      uploadArea.style.background = '#f0f8f8';
+    });
+    uploadArea.addEventListener('dragleave', e => {
+      e.preventDefault();
+      uploadArea.style.borderColor = '#4a9b8e';
+      uploadArea.style.background = '#f8f9fa';
+    });
+    uploadArea.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadArea.style.borderColor = '#4a9b8e';
+      uploadArea.style.background = '#f8f9fa';
+      if (e.dataTransfer.files.length > 0) {
+        uploadImage(e.dataTransfer.files[0]);
+      }
+    });
+
+    // Upload to backend
+    function uploadImage(file) {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      uploadArea.innerHTML = '<p style="color:#4a9b8e;font-weight:600;">🔍 Analyzing image...</p>';
+
+      fetch('/predict', { method: 'POST', body: formData })
+        .then(res => res.json())
+        .then(data => {
+          showBreedResult(data.breed, data.confidence, data.info);
+        })
+        .catch(err => {
+          console.error(err);
+          uploadArea.innerHTML = '<p style="color:#e74c3c;">⚠️ Failed to process. Try again.</p>';
+        });
+    }
+
+    // Show results
+    function showBreedResult(breed, confidence, info) {
+      document.getElementById('resultBreed').textContent = `Identified: ${breed}`;
+      document.getElementById('confidence').textContent = `Confidence: ${confidence}%`;
+
+      let infoHtml = '';
+      if (info) {
+        if (info.origin) infoHtml += `<div class="info-item"><span class="info-label">Origin:</span> ${info.origin}</div>`;
+        if (info.characteristics) infoHtml += `<div class="info-item"><span class="info-label">Characteristics:</span> ${info.characteristics}</div>`;
+        if (info.avgMilk) infoHtml += `<div class="info-item"><span class="info-label">Average Milk Yield:</span> ${info.avgMilk}</div>`;
+        if (info.color) infoHtml += `<div class="info-item"><span class="info-label">Color:</span> ${info.color}</div>`;
+      }
+
+      document.getElementById('breedInfo').innerHTML = infoHtml;
+
+      uploadArea.classList.remove('active');
+      resultSection.classList.add('active');
+    }
+
+    function resetApp() {
+      uploadArea.classList.remove('active');
+      resultSection.classList.remove('active');
+      scanButton.style.display = 'flex';
+      uploadArea.innerHTML = `
+        <p style="margin-bottom: 15px; color: #7f8c8d;">Click or drag and drop an image</p>
+        <input type="file" id="fileInput" class="file-input" accept="image/*">
+        <button onclick="document.getElementById('fileInput').click()" style="background:#4a9b8e;color:white;border:none;padding:10px 20px;border-radius:25px;cursor:pointer;">Choose Image</button>
+      `;
+      document.getElementById('fileInput').addEventListener('change', (e) => {
+        if (e.target.files.length > 0) uploadImage(e.target.files[0]);
+      });
+    }
+  </script>
+</body>
+</html> -->
